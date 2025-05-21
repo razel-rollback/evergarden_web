@@ -1,0 +1,97 @@
+
+I understand you need a database design for a laundry shop business that supports both a website and walk-in customers. The business offers three main services: wash, dry, and iron, with different pricing tiers. They also sell soap products separately. The website requires user registration and different user roles: admin, customer, and staff. The system should support service picking and ordering for both online and walk-in customers.
+
+I will design a relational database schema that covers the following entities and relationships:
+
+- Users: with roles (admin, customer, staff)
+- Services: wash, dry, iron with different tiers and prices
+- Soap products: separate product offerings sold as add-ons or standalone
+- Orders: capturing customer orders, with details of chosen services and products
+- Order items: details on individual services or products in an order
+- Possibly track staff assignments for orders (e.g., who processed which order)
+- Service tiers/pricing linked with each service
+- User registration data (profile, login info)
+- Support for walk-in (offline) orders as well as online orders
+
+Plan:
+- Table: Users (id, name, email, password_hash, role, contact info, etc.)
+- Table: Services (id, name [wash, dry, iron], description)
+- Table: ServiceTiers (id, service_id, tier_name, price)
+- Table: Products (id, name, description, price, stock_qty) - for soaps
+- Table: Orders (id, user_id, order_date, status, total_price, type [walk-in/online])
+- Table: OrderItems (id, order_id, item_type [service/product], item_id, quantity, unit_price, total_price)
+- Table: StaffAssignments (id, order_id, staff_user_id, assigned_date, status)
+
+Dependent files to be edited:
+- N/A (design only)
+
+Followup steps:
+- Confirm requirements and any additional data needed
+- Create an ER diagram if necessary
+- Implement the database schema in SQL or preferred DBMS
+- Develop backend logic for user roles and ordering workflows
+
+
+Here is the proposed database structure for the laundry shop management system supporting website and walk-in customers:
+
+Users
+- user_id (PK)
+- name
+- email (unique)
+- password_hash
+- role (enum: 'admin', 'customer', 'staff')
+- phone
+- address
+- created_at
+- updated_at
+
+Services
+- service_id (PK)
+- name (e.g. 'wash', 'dry', 'iron')
+- description
+
+ServiceTiers
+- tier_id (PK)
+- service_id (FK to Services)
+- tier_name (e.g. 'basic', 'premium')
+- price
+
+Products
+- product_id (PK)
+- name (e.g. 'soap type A')
+- description
+- price
+- stock_quantity
+- created_at
+- updated_at
+
+Orders
+- order_id (PK)
+- user_id (FK to Users) (nullable for walk-in if anonymous)
+- order_date
+- status (e.g. 'pending', 'in_progress', 'completed', 'cancelled')
+- total_amount
+- order_type (enum: 'online', 'walk_in')
+- assigned_staff_id (FK to Users for staff processing order, nullable)
+- created_at
+- updated_at
+
+OrderItems
+- order_item_id (PK)
+- order_id (FK to Orders)
+- item_type (enum: 'service', 'product')
+- item_id (FK to Services or Products depending on item_type)
+- tier_id (FK to ServiceTiers, nullable if item_type is product)
+- quantity
+- unit_price
+- total_price
+
+This structure supports:
+- Different pricing tiers per service
+- Selling different soap products
+- Orders containing multiple services and/or products
+- User roles for admin, customer, staff
+- Tracking which staff handled each order
+- Both online and walk-in orders (anonymous or with user record)
+
+Please confirm if you'd like me to create SQL DDL scripts for this design or if you want me to adjust or add additional features.

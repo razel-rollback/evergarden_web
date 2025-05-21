@@ -1,0 +1,109 @@
+Here's a formal **Deliverable Document** for the **Business Rules and Process** of your **Laundry Shop Monitoring and Services System**, designed to support both in-store and online operations.
+
+---
+
+# 📄 **Deliverable Document**
+
+## Title: Business Rules and Process for Laundry Shop Monitoring and Services System
+
+**Client:** \[Laundry Shop Name]
+**Prepared by:** \[Your Name], Database Architect
+**Date:** May 18, 2025
+
+---
+
+## 📘 1. Introduction
+
+This document outlines the **business rules** and **process workflows** governing the operations of the Laundry Shop Monitoring and Services System. The system is designed to streamline laundry services, ensure accuracy in customer orders, and enable online service bookings with real-time status updates. It supports both **in-store** and **online** transactions, enabling operational flexibility and customer convenience.
+
+---
+
+## 🧾 2. Business Rules
+
+| Rule ID | Description                                                                                                                                                                                   |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BR-001  | All customers must provide a name and contact information before placing an order. Registered customers using the online system must have a valid email and password.                         |
+| BR-002  | Each laundry order must be assigned a unique transaction ID (order code) for tracking and reference purposes.                                                                                 |
+| BR-003  | Orders are categorized by status: `Pending`, `Processing`, `Ready for Pickup/Delivery`, `Delivered`, and `Cancelled`. Status changes must be logged with timestamps.                          |
+| BR-004  | Services may be priced per kilogram (kg) or by flat/item-based rates. The pricing method is based on the type of service selected.                                                            |
+| BR-005  | Staff/employees must be assigned to each laundry order. Their responsibilities include washing, folding, ironing, or delivery. Their assignments must be tracked in the system.               |
+| BR-006  | Inventory items (e.g., detergent, packaging materials) must be deducted automatically based on services rendered. The system must generate alerts if stock falls below the reorder threshold. |
+| BR-007  | Online customers can book services with optional pick-up and delivery scheduling. They may pay online or in person.                                                                           |
+| BR-008  | Customers must receive automated notifications when their laundry is ready or their delivery is en route. Notifications may be sent via SMS, email, or app alerts.                            |
+| BR-009  | Discounts and promotions may be applied automatically if order conditions are met (e.g., order above ₱500 = 10% off).                                                                         |
+| BR-010  | Admin users must be able to generate reports on orders, revenue, service popularity, employee performance, and customer activity.                                                             |
+
+---
+
+## 🔄 3. Business Process Workflows
+
+### **3.1 Customer Order Workflow (Walk-In)**
+
+1. Customer arrives at the shop and provides name, phone number, and laundry details.
+2. Staff enters the order into the system, selecting services and noting total weight.
+3. The system calculates the total cost and assigns a unique order code.
+4. Customer receives a printed or SMS receipt with pickup date.
+5. Order is processed by assigned staff.
+6. Order status is updated as it moves through each stage.
+7. When ready, the customer is notified for pickup.
+8. Payment is completed (if unpaid), and the order is marked as delivered.
+
+---
+
+### **3.2 Online Booking Workflow**
+
+1. Customer registers or logs in via web/mobile app.
+2. They select services, provide laundry weight (estimated), and choose a pickup schedule.
+3. System calculates an estimated total and displays payment options.
+4. Payment is completed online or selected as "Pay on Pickup."
+5. System assigns the order to available staff.
+6. Laundry is picked up, processed, and status is updated.
+7. Customer receives real-time notifications.
+8. Delivery is made, or customer picks up; order is marked complete.
+
+---
+
+### **3.3 Inventory Management Workflow**
+
+1. Admin adds inventory items (e.g., detergent, fabric softener).
+2. When services are completed, system deducts corresponding inventory.
+3. If stock falls below reorder level, the system alerts the admin.
+4. Inventory reports are available for auditing and replenishment planning.
+
+---
+
+### **3.4 Employee Assignment Workflow**
+
+1. Admin registers employees and assigns their roles (washer, folder, delivery).
+2. For each order, staff is assigned via the system.
+3. Completion time and order quality are tracked.
+4. Admin can view employee performance reports.
+
+---
+
+### **3.5 Discount/Promo Application Workflow**
+
+1. Admin creates a discount rule (e.g., “10% off orders over ₱500 from May 1–31”).
+2. System checks each order against active promotions.
+3. If the condition is met, the discount is applied automatically.
+4. Discounted amount is reflected in the invoice and payment summary.
+
+---
+
+## 📊 4. Benefits of the System
+
+* **Operational Efficiency:** Tracks every step of the laundry process accurately.
+* **Customer Satisfaction:** Customers receive real-time updates and convenient service booking.
+* **Revenue Monitoring:** Admin can monitor sales and employee productivity.
+* **Inventory Control:** Prevents shortages and overstocking of supplies.
+* **Online Integration:** Expands business reach and modernizes service experience.
+
+---
+
+## ✅ 5. Conclusion
+
+This business rule and process document serves as a foundation for system development, database modeling, and workflow automation. Adhering to these rules ensures consistent service quality, improved customer experience, and scalable operations.
+
+---
+
+Would you like this document exported as a formatted Word or PDF file? I can generate that for you next.
