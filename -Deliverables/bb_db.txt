@@ -1,97 +1,144 @@
+"""
+the png is the latest db
+"""""
+-- Core Tables
+CREATE TABLE role (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,
+    permissions JSONB
+);
 
-I understand you need a database design for a laundry shop business that supports both a website and walk-in customers. The business offers three main services: wash, dry, and iron, with different pricing tiers. They also sell soap products separately. The website requires user registration and different user roles: admin, customer, and staff. The system should support service picking and ordering for both online and walk-in customers.
+CREATE TABLE "user" (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    role_id INT REFERENCES role(role_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-I will design a relational database schema that covers the following entities and relationships:
+CREATE TABLE customer (
+    customer_id INT PRIMARY KEY REFERENCES "user"(user_id),
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20),
+    address JSONB,
+    loyalty_points INT DEFAULT 0
+);
 
-- Users: with roles (admin, customer, staff)
-- Services: wash, dry, iron with different tiers and prices
-- Soap products: separate product offerings sold as add-ons or standalone
-- Orders: capturing customer orders, with details of chosen services and products
-- Order items: details on individual services or products in an order
-- Possibly track staff assignments for orders (e.g., who processed which order)
-- Service tiers/pricing linked with each service
-- User registration data (profile, login info)
-- Support for walk-in (offline) orders as well as online orders
+CREATE TABLE employee (
+    employee_id INT PRIMARY KEY REFERENCES "user"(user_id),
+    position VARCHAR(50),
+    hire_date DATE,
+    salary DECIMAL(10,2),
+    manager_id INT REFERENCES employee(employee_id)
+);
 
-Plan:
-- Table: Users (id, name, email, password_hash, role, contact info, etc.)
-- Table: Services (id, name [wash, dry, iron], description)
-- Table: ServiceTiers (id, service_id, tier_name, price)
-- Table: Products (id, name, description, price, stock_qty) - for soaps
-- Table: Orders (id, user_id, order_date, status, total_price, type [walk-in/online])
-- Table: OrderItems (id, order_id, item_type [service/product], item_id, quantity, unit_price, total_price)
-- Table: StaffAssignments (id, order_id, staff_user_id, assigned_date, status)
+-- Product Structure
+CREATE TABLE product_type (
+    type_id SERIAL PRIMARY KEY,
+    type_name VARCHAR(50) NOT NULL,
+    description TEXT
+);
 
-Dependent files to be edited:
-- N/A (design only)
+CREATE TABLE size (
+    size_id SERIAL PRIMARY KEY,
+    size_name VARCHAR(50) NOT NULL,
+    size_description TEXT,
+    size_code VARCHAR(10)
+);
 
-Followup steps:
-- Confirm requirements and any additional data needed
-- Create an ER diagram if necessary
-- Implement the database schema in SQL or preferred DBMS
-- Develop backend logic for user roles and ordering workflows
+CREATE TABLE product (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    base_price DECIMAL(10,2),
+    product_type_id INT REFERENCES product_type(type_id),
+    is_available BOOLEAN DEFAULT TRUE
+);
 
+CREATE TABLE product_variant (
+    variant_id SERIAL PRIMARY KEY,
+    product_id INT REFERENCES product(product_id),
+    size_id INT REFERENCES size(size_id),
+    price DECIMAL(10,2) NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE,
+    UNIQUE(product_id, size_id)
+);
 
-Here is the proposed database structure for the laundry shop management system supporting website and walk-in customers:
+-- Inventory Management
+CREATE TABLE inventory_type (
+    type_id SERIAL PRIMARY KEY,
+    type_name VARCHAR(50) NOT NULL,
+    description TEXT
+);
 
-Users
-- user_id (PK)
-- name
-- email (unique)
-- password_hash
-- role (enum: 'admin', 'customer', 'staff')
-- phone
-- address
-- created_at
-- updated_at
+CREATE TABLE inventoryitem (
+    item_id SERIAL PRIMARY KEY,
+    item_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    inventory_type_id INT REFERENCES inventory_type(type_id),
+    unit_of_measure VARCHAR(20),
+    perishable BOOLEAN DEFAULT FALSE,
+    shelf_life_days INT
+);
 
-Services
-- service_id (PK)
-- name (e.g. 'wash', 'dry', 'iron')
-- description
+CREATE TABLE product_composition (
+    composition_id SERIAL PRIMARY KEY,
+    variant_id INT REFERENCES product_variant(variant_id),
+    inventoryitem_id INT REFERENCES inventoryitem(item_id),
+    quantity_required DECIMAL(10,2) NOT NULL,
+    location_id INT REFERENCES location(location_id),
+    notes TEXT
+);
 
-ServiceTiers
-- tier_id (PK)
-- service_id (FK to Services)
-- tier_name (e.g. 'basic', 'premium')
-- price
+CREATE TABLE inventory_transaction (
+    transaction_id SERIAL PRIMARY KEY,
+    item_id INT REFERENCES inventoryitem(item_id),
+    transaction_type VARCHAR(20) CHECK (transaction_type IN ('receipt', 'usage', 'adjustment', 'reservation', 'transfer')),
+    quantity DECIMAL(10,2) NOT NULL,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    employee_id INT REFERENCES employee(employee_id),
+    reference_id INT, -- Can reference orders, shipments, etc.
+    reference_type VARCHAR(50), -- 'order', 'shipment', etc.
+    notes TEXT
+);
 
-Products
-- product_id (PK)
-- name (e.g. 'soap type A')
-- description
-- price
-- stock_quantity
-- created_at
-- updated_at
+-- Order Management
+CREATE TABLE "order" (
+    order_id SERIAL PRIMARY KEY,
+    customer_id INT REFERENCES customer(customer_id),
+    employee_id INT REFERENCES employee(employee_id),
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) CHECK (status IN ('pending', 'processing', 'completed', 'cancelled')),
+    total_amount DECIMAL(10,2),
+    delivery_address JSONB,
+    delivery_date TIMESTAMP,
+    payment_status VARCHAR(20)
+);
 
-Orders
-- order_id (PK)
-- user_id (FK to Users) (nullable for walk-in if anonymous)
-- order_date
-- status (e.g. 'pending', 'in_progress', 'completed', 'cancelled')
-- total_amount
-- order_type (enum: 'online', 'walk_in')
-- assigned_staff_id (FK to Users for staff processing order, nullable)
-- created_at
-- updated_at
+CREATE TABLE orderitem (
+    orderitem_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES "order"(order_id),
+    variant_id INT REFERENCES product_variant(variant_id),
+    quantity INT NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (quantity * unit_price) STORED
+);
 
-OrderItems
-- order_item_id (PK)
-- order_id (FK to Orders)
-- item_type (enum: 'service', 'product')
-- item_id (FK to Services or Products depending on item_type)
-- tier_id (FK to ServiceTiers, nullable if item_type is product)
-- quantity
-- unit_price
-- total_price
+CREATE TABLE addons (
+    addon_id SERIAL PRIMARY KEY,
+    addon_name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE
+);
 
-This structure supports:
-- Different pricing tiers per service
-- Selling different soap products
-- Orders containing multiple services and/or products
-- User roles for admin, customer, staff
-- Tracking which staff handled each order
-- Both online and walk-in orders (anonymous or with user record)
-
-Please confirm if you'd like me to create SQL DDL scripts for this design or if you want me to adjust or add additional features.
+CREATE TABLE order_addon (
+    order_addon_id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES "order"(order_id),
+    addon_id INT REFERENCES addons(addon_id),
+    quantity INT NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) GENERATED ALWAYS AS (quantity * unit_price) STORED
+);

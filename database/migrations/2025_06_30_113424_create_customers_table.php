@@ -6,25 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id('customer_id');
             $table->string('first_name');
-            $table->string('middle_name');
             $table->string('last_name');
-            $table->enum('sex', ['Male', 'Female']);
-            $table->date('birthdate')->nullable();
-            $table->string('email')->unique();
-            $table->string('phone')->nullable();
-            $table->string('address')->nullable();
-            $table->string('status')->nullable();
+            $table->string('phone');
+            $table->unsignedBigInteger('account_id');
             $table->timestamps();
+            $table->foreign('account_id')->references('account_id')->on('accounts')->onDelete('cascade');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
+        Schema::table('customers', function (Blueprint $table) {
+            $table->dropForeign(['account_id']);
+        });
         Schema::dropIfExists('customers');
     }
 };
