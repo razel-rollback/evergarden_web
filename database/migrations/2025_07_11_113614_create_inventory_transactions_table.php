@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('inventory_transactions', function (Blueprint $table) {
             $table->id('transaction_id');
             $table->unsignedBigInteger('inventory_item_id');
-            $table->quantity('quantity'); // Quantity of the item involved in the transaction
+            $table->decimal('quantity', 10, 2); // Quantity of the item involved in the transaction
             $table->enum('transaction_type', ['stock_in', 'sale', 'wastage', 'adjustment']);
             $table->decimal('cost', 10, 2)->default(0); // Price per unit of the item
             $table->unsignedBigInteger('reference_id')->nullable(); // Reference to another table, e.g., sales or purchase orders

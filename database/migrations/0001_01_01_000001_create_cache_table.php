@@ -29,7 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cache');
+        Schema::dropIfExists('cachedefaults');
         Schema::dropIfExists('cache_locks');
     }
 };

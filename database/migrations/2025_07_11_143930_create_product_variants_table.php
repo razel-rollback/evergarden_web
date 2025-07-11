@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('color');
             $table->decimal('price', 10, 2); // Price of the product variant```
             $table->boolean('is_active')->default(true); // Indicates if the variant is active
-            $table->unsignedBigInteger('product_id'); // Foreign key to products table
             $table->timestamps();
             $table->foreign('product_id')
                 ->references('product_id')

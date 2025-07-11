@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('img_alt')->nullable(); // Alternative text for the image
             $table->boolean('is_primary')->default(false); // Indicates if this is the primary image for the product variant
             $table->integer('sort_order')->default(0); // Sort order for displaying images
-            $table->$table->timestamps();
+            $table->timestamps();
             $table->foreign('variant_id')
                 ->references('variant_id')
                 ->on('product_variants')

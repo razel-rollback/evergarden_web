@@ -18,6 +18,14 @@ return new class extends Migration
             $table->decimal('quantity', 10, 2); // Quantity of the product variant in the order
             $table->decimal('unit_price', 10, 2); // Price of the product variant at the time of order
             $table->timestamps();
+            $table->foreign('order_id')
+                ->references('order_id')
+                ->on('orders')
+                ->onDelete('cascade'); // Foreign key constraint to orders table
+            $table->foreign('variant_id')
+                ->references('variant_id')
+                ->on('product_variants')
+                ->onDelete('cascade'); // Foreign key constraint to product variants table
         });
     }
 
