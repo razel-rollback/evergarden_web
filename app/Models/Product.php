@@ -13,16 +13,18 @@ class Product extends Model
     protected $fillable = [
         'name',
         'description',
-        'price',
-        'image_url',
-        'status',
+        'base_price',
+        'product_type_id',
+        'stock',
+        'is_available',
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
     protected $casts = [
-        'price' => 'decimal:2',
+        'is_available' => 'boolean',
+        'base_price' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

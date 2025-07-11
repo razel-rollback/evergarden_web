@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
+            $table->enum('gender', ['male', 'female']);
+            $table->date('birth_date')->nullable();
+            $table->string('address')->nullable();
             $table->unsignedBigInteger('account_id');
             $table->timestamps();
             $table->foreign('account_id')->references('account_id')->on('accounts')->onDelete('cascade');

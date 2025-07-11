@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id('order_id');
             $table->unsignedBigInteger('customer_id');
+            $table->decimal('total_amount', 10, 2);
+            $table->date('delivery_date');
+            $table->string('delivery_address');
             $table->datetime('order_date');
             $table->string('recipient_name'); // Name of the person receiving the flowers.
             $table->string('recipient_phone'); // Contact number for the recipient.
-            $table->date('delivery_date');
-            $table->string('delivery_address');
-            $table->text('special_instructions')->nullable(); // Any special instructions for the order.
-            $table->decimal('total_amount', 10, 2);
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
+            $table->text('personalize_msg')->nullable(); // Any special instructions for the order.
+            $table->text('instructions')->nullable(); // Any special instructions for the order.
             $table->timestamps();
             $table->foreign('customer_id')->references('customer_id')->on('customers')->onDelete('cascade');
         });

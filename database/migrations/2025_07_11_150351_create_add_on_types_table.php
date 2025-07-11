@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('add_ons', function (Blueprint $table) {
-            $table->id('add_on_id');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->decimal('price', 10, 2);
-            $table->integer('stock')->default(0);
-            $table->boolean('is_active')->default(true);
+        Schema::create('add_on_types', function (Blueprint $table) {
+            $table->id('add_on_type_id'); // Primary key for add-on types
+            $table->string('name'); // Name of the add-on type
+            $table->string('description')->nullable(); // Description of the add-on type
+            $table->boolean('is_active')->default(true); // Indicates if the add-on type is active
             $table->timestamps();
         });
     }

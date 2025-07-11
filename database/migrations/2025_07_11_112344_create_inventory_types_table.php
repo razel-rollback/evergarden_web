@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id('product_id');
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->decimal('base_price', 10, 2);
-            $table->integer('stock')->default(0);
-            $table->boolean('is_available')->default(true);
+        Schema::create('inventory_types', function (Blueprint $table) {
+            $table->id('type_id'); // Primary key for inventory types
+            $table->string('name'); // Name of the inventory type
+            $table->text('description')->nullable(); // Description of the inventory type
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('inventory_types');
     }
 };

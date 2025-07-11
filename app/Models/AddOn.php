@@ -12,7 +12,7 @@ class AddOn extends Model
     protected $primaryKey = 'add_on_id';
     protected $fillable = [
         'name',
-        'description',
+        'add_on_type_id',
         'price',
         'is_active',
     ];
@@ -20,16 +20,8 @@ class AddOn extends Model
         'is_active' => 'boolean',
         'price' => 'decimal:2',
     ];
-    public function orderAddOns()
-    {
-        return $this->hasMany(OrderAddOn::class, 'add_on_id', 'add_on_id');
-    }
-    public function setPriceAttribute($value)
-    {
-        $this->attributes['price'] = number_format($value, 2, '.', '');
-    }
-    public function getPriceAttribute($value)
-    {
-        return number_format($value, 2, '.', '');
-    }
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

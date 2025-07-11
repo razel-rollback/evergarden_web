@@ -10,16 +10,21 @@ class ProductComponent extends Model
     use HasFactory;
     protected $table = 'product_components';
     protected $fillable = [
-        'product_id',
-        'inventory_id',
+        'variant_id',
+        'inventory_item_id',
+        'color',
+        'size',
         'quantity',
+        'notes'
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id', 'product_id');
-    }
+    protected $casts = [
+        'quantity' => 'decimal:2', // Cast quantity to decimal with 2 decimal places
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+
+    ];
 }

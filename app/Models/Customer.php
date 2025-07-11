@@ -15,13 +15,20 @@ class Customer extends Model
         'first_name',
         'last_name',
         'phone',
-        'account_id',
+        'gender',
+        'birth_date',
+        'address',
+        'account_id'
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
-
+    protected $casts = [
+        'birth_date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;

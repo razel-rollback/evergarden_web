@@ -12,19 +12,35 @@ class OrderAddOn extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'order_id',
+        'order_items_id',
         'add_on_id',
         'quantity',
         'unit_price',
     ];
-
-    public function order()
+    protected $casts = [
+        'quantity' => 'decimal:2', // Cast quantity to decimal with 2 decimal places
+        'unit_price' => 'decimal:2', // Cast unit_price to decimal with 2 decimal places
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+    public function orderItem()
     {
-        return $this->belongsTo(Order::class, 'order_id');
+        return $this->belongsTo(OrderItem::class, 'order_items_id', 'order_item_id');
     }
-
     public function addOn()
     {
-        return $this->belongsTo(AddOn::class, 'add_on_id');
+        return $this->belongsTo(AddOn::class, 'add_on_id', 'add_on_id');
+    }
+    public function getFormattedUnitPriceAttribute()
+    {
+        return number_format($this->unit_price, 2);
+    }
+    public function getFormattedQuantityAttribute()
+    {
+        return number_format($this->quantity, 2);
     }
 }

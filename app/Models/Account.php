@@ -14,8 +14,8 @@ class Account extends Model
 
     protected $fillable = [
         'username',
-        'email',
         'password',
+        'email',
         'googleid',
         'role_id',
     ];
@@ -28,6 +28,8 @@ class Account extends Model
     ];
 
     protected $casts = [
+        'is active' => 'boolean',
+        'last_login' => 'datetime',
         'email_verified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

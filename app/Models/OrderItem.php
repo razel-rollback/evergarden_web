@@ -13,22 +13,18 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
-        'product_id',
+        'variant_id',
         'quantity',
         'unit_price',
     ];
     protected $casts = [
-        'quantity' => 'integer',
-        'unit_price' => 'decimal:2',
+        'quantity' => 'decimal:2', // Cast quantity to decimal with 2 decimal places
+        'unit_price' => 'decimal:2', // Cast unit_price to decimal with 2 decimal places
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
-
-    public function order()
-    {
-        return $this->belongsTo(Order::class, 'order_id');
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id');
-    }
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

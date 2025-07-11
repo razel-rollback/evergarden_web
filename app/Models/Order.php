@@ -14,14 +14,16 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
+        'employee_id', // Employee handling the order, if applicable.
+        'total_amount',
+        'delivery_date',
+        'delivery_address',
         'order_date',
         'recipient_name',
         'recipient_phone',
-        'delivery_date',
-        'delivery_address',
-        'special_instructions',
-        'total_amount',
         'status',
+        'personalize_msg', // Any special instructions for the order.
+        'instructions',
     ];
 
     protected $casts = [
