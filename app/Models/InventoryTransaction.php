@@ -26,4 +26,18 @@ class InventoryTransaction extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ]; // Cast attributes to specific types
+    /**
+     * Get the inventory item that owns the transaction.
+     */
+    public function inventoryItem()
+    {
+        return $this->belongsTo(InventoryItem::class, 'inventory_item_id', 'inventory_item_id');
+    }
+    /**
+     * Get the employee that performed the transaction.
+     */
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
+    }
 }

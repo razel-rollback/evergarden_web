@@ -24,4 +24,23 @@ class ProductVariant extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ]; // Cast attributes to specific types
+    /**
+     * Get the product that owns the variant.
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+    }
+    public function orderitems()
+    {
+        return $this->hasMany(OrderItem::class, 'variant_id', 'variant_id');
+    }
+    public function components()
+    {
+        return $this->hasMany(ProductComponent::class, 'variant_id', 'variant_id');
+    }
+    public function images()
+    {
+        return $this->hasMany(ProductImg::class, 'variant_id', 'variant_id');
+    }
 }

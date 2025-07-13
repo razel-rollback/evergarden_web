@@ -27,4 +27,23 @@ class OrderItem extends Model
         'created_at',
         'updated_at',
     ];
+    /**
+     * Get the order that owns the order item.
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'order_id');
+    }
+    /**
+     * Get the product variant associated with the order item.
+     */
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id', 'variant_id');
+    }
+
+    public function addOns()
+    {
+        return $this->hasMany(OrderAddOn::class, 'order_items_id', 'order_item_id');
+    }
 }

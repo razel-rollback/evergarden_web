@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InventoryItems extends Model
+class InventoryItem extends Model
 {
     use HasFactory;
     protected $table = 'inventory_items'; // Specify the table name if it differs from the model name
@@ -33,8 +33,20 @@ class InventoryItems extends Model
         'max_stock' => 'decimal:2', // Cast max_stock to decimal with 2 decimal places
         'cost_price' => 'decimal:2', // Cast cost_price to decimal with 2 decimal places
     ];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
     public function type()
     {
         return $this->belongsTo(InventoryType::class, 'type_id', 'type_id');
+    }
+    public function components()
+    {
+        return $this->hasMany(ProductComponent::class, 'inventory_item_id', 'inventory_item_id');
+    }
+    public function transaction()
+    {
+        return $this->hasMany(InventoryTransaction::class, 'inventory_item_id', 'inventory_item_id');
     }
 }

@@ -27,4 +27,18 @@ class ProductComponent extends Model
         'updated_at' => 'datetime',
 
     ];
+    /**
+     * Get the product variant that owns the component.
+     */
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id', 'variant_id');
+    }
+    /**
+     * Get the inventory item associated with the component.
+     */
+    public function inventoryItem()
+    {
+        return $this->belongsTo(InventoryItem::class, 'inventory_item_id', 'inventory_item_id');
+    }
 }

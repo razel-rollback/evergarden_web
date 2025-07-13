@@ -15,14 +15,15 @@ class Employee extends Model
         'first_name',
         'middle_name',
         'last_name',
-        'phone',
-        'address',
         'position',
-        'employment_date',
-        'termination_date',
-        'status', // e.g., active, inactive, suspended
+        'salary',
+        'hire_date',
+        'fire_date',
+        'manager_id',
         'account_id',
+        'is_active', // e.g., active, inactive, suspended
     ];
+
 
     protected $hidden = [
         'created_at',
@@ -36,8 +37,16 @@ class Employee extends Model
     {
         $this->attributes['email'] = strtolower($value);
     }
-    public function user()
+    public function account()
     {
         return $this->belongsTo(Account::class, 'account_id', 'account_id');
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'employee_id', 'employee_id');
+    }
+    public function inventory()
+    {
+        return $this->hasMany(InventoryTransaction::class, 'employee_id', 'employee_id');
     }
 }

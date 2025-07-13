@@ -17,4 +17,11 @@ class ProductType extends Model
         'updated_at' => 'datetime',
     ]; // Cast attributes to specific types
 
+    /**
+     * Get the products associated with this product type.
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'product_type_id', 'product_type_id');
+    }
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AddOn extends Model
 {
     use HasFactory;
-    protected $table = 'addons';
+    protected $table = 'add_ons';
     protected $primaryKey = 'add_on_id';
     protected $fillable = [
         'name',
@@ -24,4 +24,17 @@ class AddOn extends Model
         'created_at',
         'updated_at',
     ];
+    /**
+     * Get the add-on type associated with this add-on.
+     */
+    public function addOnType()
+    {
+        return $this->belongsTo(AddOnType::class, 'add_on_type_id', 'add_on_type_id');
+    }
+    public function orderItems()
+    {
+        return $this->belongsToMany(OrderItem::class, 'order_add_ons', 'add_on_id', 'order_item_id')
+            ->withPivot('quantity', 'unit_prices')
+            ->withTimestamps();
+    }
 }

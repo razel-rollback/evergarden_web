@@ -32,13 +32,12 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
-
-    public function orderitems()
+    public function productType()
     {
-        return $this->hasMany(OrderItem::class, 'order_items', 'product_id', 'product_id');
+        return $this->belongsTo(ProductType::class, 'product_type_id', 'product_type_id');
     }
-    public function components()
+    public function variants()
     {
-        return $this->hasMany(ProductComponent::class, 'product_id', 'product_id');
+        return $this->hasMany(ProductVariant::class, 'product_id', 'product_id');
     }
 }

@@ -26,4 +26,11 @@ class Payment extends Model
         'created_at',
         'updated_at',
     ]; // Hide timestamps from JSON serialization
+    /**
+     * Get the order that owns the payment.
+     */
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'order_id');
+    }
 }

@@ -20,4 +20,11 @@ class InventoryType extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+    /**
+     * Get the inventory items associated with this inventory type.
+     */
+    public function inventoryItems()
+    {
+        return $this->hasMany(InventoryItem::class, 'type_id', 'type_id');
+    }
 }

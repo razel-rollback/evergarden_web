@@ -24,4 +24,25 @@ class ProductImg extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ]; // Cast attributes to specific types
+    /**
+     * Get the product variant that owns the image.
+     */
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'variant_id', 'variant_id');
+    }
+    /**
+     * Scope a query to only include primary images.
+     */
+    public function scopePrimary($query)
+    {
+        return $query->where('is_primary', true);
+    }
+    /**
+     * Scope a query to order images by sort order.
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order', 'asc');
+    }
 }

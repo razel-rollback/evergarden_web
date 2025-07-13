@@ -39,12 +39,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class, 'order_items', 'order_id', 'order_id');
     }
-    public function orderAddOns()
+    public function employee()
     {
-        return $this->hasMany(OrderAddOn::class, 'order_add_ons', 'order_id', 'order_id');
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
-
-
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'order_id', 'order_id');
+    }
     public function setTotalAmountAttribute($value)
     {
         $this->attributes['total_amount'] = number_format($value, 2, '.', '');
